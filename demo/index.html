@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebGPU CubeView Demo</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #1a1a2e;
+      color: #eee;
+      font-family: system-ui, sans-serif;
+    }
+    #cubeCanvas {
+      border: 1px solid #444;
+      border-radius: 8px;
+    }
+    #info {
+      margin-top: 16px;
+      font-size: 14px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h2>WebGPU CubeView</h2>
+  <canvas id="cubeCanvas"></canvas>
+  <div id="info">phi: — / theta: —</div>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>
