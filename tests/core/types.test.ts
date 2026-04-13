@@ -43,12 +43,12 @@ describe("FACE_ANGLES", () => {
 
 describe("faceIndexToFace", () => {
   it("maps Babylon.js box face indices 0-5 to CubeFace", async () => {
-    // Babylon.js CreateBox face order: front, back, right, left, top, bottom
+    // Babylon.js CreateBox face order: right(X+), left(X-), front(Z+), back(Z-), top(Y+), bottom(Y-)
     const { faceIndexToFace } = await import("../../src/core/types");
-    expect(faceIndexToFace(0)).toBe(CubeFace.FRONT);
-    expect(faceIndexToFace(1)).toBe(CubeFace.BACK);
-    expect(faceIndexToFace(2)).toBe(CubeFace.RIGHT);
-    expect(faceIndexToFace(3)).toBe(CubeFace.LEFT);
+    expect(faceIndexToFace(0)).toBe(CubeFace.RIGHT);
+    expect(faceIndexToFace(1)).toBe(CubeFace.LEFT);
+    expect(faceIndexToFace(2)).toBe(CubeFace.FRONT);
+    expect(faceIndexToFace(3)).toBe(CubeFace.BACK);
     expect(faceIndexToFace(4)).toBe(CubeFace.TOP);
     expect(faceIndexToFace(5)).toBe(CubeFace.BOTTOM);
   });

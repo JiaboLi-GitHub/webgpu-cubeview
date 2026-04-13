@@ -51,14 +51,14 @@ export const FACE_LABELS: Record<CubeFace, string> = {
 };
 
 /**
- * Babylon.js CreateBox face index ordering:
- * 0=front(Z+), 1=back(Z-), 2=right(X+), 3=left(X-), 4=top(Y+), 5=bottom(Y-)
+ * Babylon.js CreateBox face index ordering (verified empirically):
+ * 0=right(X+), 1=left(X-), 2=front(Z+), 3=back(Z-), 4=top(Y+), 5=bottom(Y-)
  */
 const FACE_INDEX_ORDER: CubeFace[] = [
-  CubeFace.FRONT,
-  CubeFace.BACK,
   CubeFace.RIGHT,
   CubeFace.LEFT,
+  CubeFace.FRONT,
+  CubeFace.BACK,
   CubeFace.TOP,
   CubeFace.BOTTOM,
 ];

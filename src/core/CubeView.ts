@@ -10,6 +10,14 @@ import { Color4 } from "@babylonjs/core/Maths/math.color";
 import { Animation } from "@babylonjs/core/Animations/animation";
 import { CubicEase, EasingFunction } from "@babylonjs/core/Animations/easing";
 
+// Side-effect imports: register engine methods needed by Babylon.js features
+import "@babylonjs/core/Engines/Extensions/engine.dynamicTexture";
+import "@babylonjs/core/Engines/Extensions/engine.alpha";
+import "@babylonjs/core/Engines/WebGPU/Extensions/engine.dynamicTexture";
+import "@babylonjs/core/Engines/WebGPU/Extensions/engine.alpha";
+import "@babylonjs/core/Culling/ray"; // Required for scene.pick()
+import "@babylonjs/core/Animations/animatable"; // Required for scene.beginDirectAnimation()
+
 import { CubeFace, FACE_ANGLES } from "./types";
 import type { CubeViewOptions } from "./types";
 import { buildCube } from "./CubeBuilder";
@@ -122,24 +130,33 @@ export class CubeView {
 
   private animateToFace(face: CubeFace): void {
     const target = FACE_ANGLES[face];
+    const canvas = this.engine.getRenderingCanvas();
+
+    // Detach camera controls during animation to prevent input from fighting it
+    this.camera.detachControl();
 
     const ease = new CubicEase();
     ease.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT);
 
-    Animation.CreateAndStartAnimation(
-      "camAlpha", this.camera, "alpha",
-      ANIM_FPS, ANIM_FRAMES,
-      this.camera.alpha, target.alpha,
-      Animation.ANIMATIONLOOPMODE_CONSTANT,
-      ease,
-    );
-    Animation.CreateAndStartAnimation(
-      "camBeta", this.camera, "beta",
-      ANIM_FPS, ANIM_FRAMES,
-      this.camera.beta, target.beta,
-      Animation.ANIMATIONLOOPMODE_CONSTANT,
-      ease,
-    );
+    // Use a single beginDirectAnimation call with both alpha/beta keys
+    const alphaAnim = new Animation("camAlpha", "alpha", ANIM_FPS, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CONSTANT);
+    alphaAnim.setKeys([
+      { frame: 0, value: this.camera.alpha },
+      { frame: ANIM_FRAMES, value: target.alpha },
+    ]);
+    alphaAnim.setEasingFunction(ease);
+
+    const betaAnim = new Animation("camBeta", "beta", ANIM_FPS, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CONSTANT);
+    betaAnim.setKeys([
+      { frame: 0, value: this.camera.beta },
+      { frame: ANIM_FRAMES, value: target.beta },
+    ]);
+    betaAnim.setEasingFunction(ease);
+
+    this.scene.beginDirectAnimation(this.camera, [alphaAnim, betaAnim], 0, ANIM_FRAMES, false, 1, () => {
+      // Re-attach controls after animation completes
+      if (canvas) this.camera.attachControl(canvas, true);
+    });
   }
 
   setAngles(phi: number, theta: number): void {

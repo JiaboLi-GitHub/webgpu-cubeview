@@ -1,4 +1,4 @@
-import { C, a as s, F } from "./CubeView-BEfoJqt-.js";
+import { C, a as s, F } from "./CubeView-BRq3lZWr.js";
 export {
   C as CubeFace,
   s as CubeView,

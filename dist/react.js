@@ -1,6 +1,6 @@
 import { jsx as d } from "react/jsx-runtime";
 import { useRef as t, useEffect as C } from "react";
-import { a as V } from "./CubeView-BEfoJqt-.js";
+import { a as V } from "./CubeView-BRq3lZWr.js";
 function x({
   width: u = 150,
   height: s = 150,
