@@ -5,7 +5,6 @@ import { StandardMaterial } from "@babylonjs/core/Materials/standardMaterial";
 import { MultiMaterial } from "@babylonjs/core/Materials/multiMaterial";
 import { DynamicTexture } from "@babylonjs/core/Materials/Textures/dynamicTexture";
 import { SubMesh } from "@babylonjs/core/Meshes/subMesh";
-import { Color3 } from "@babylonjs/core/Maths/math.color";
 import type { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { CubeFace, FACE_LABELS } from "./types";
 
@@ -86,8 +85,8 @@ export function buildCube(scene: Scene): CubeBuilderResult {
     ctx.restore();
     tex.update();
 
-    mat.diffuseTexture = tex;
-    mat.specularColor = new Color3(0.1, 0.1, 0.1);
+    mat.emissiveTexture = tex;
+    mat.disableLighting = true;
 
     faceMaterials.push(mat);
     multiMat.subMaterials.push(mat);
