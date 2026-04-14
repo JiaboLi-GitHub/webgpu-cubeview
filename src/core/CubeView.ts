@@ -128,6 +128,25 @@ export class CubeView {
     return cubeView;
   }
 
+  /**
+   * Normalize angle to [-PI, PI) range.
+   */
+  private normalizeAngle(angle: number): number {
+    angle = angle % (2 * Math.PI);
+    if (angle > Math.PI) angle -= 2 * Math.PI;
+    if (angle <= -Math.PI) angle += 2 * Math.PI;
+    return angle;
+  }
+
+  /**
+   * Compute shortest-path target for alpha so the animation never rotates
+   * more than 180°. Adjusts target relative to current alpha.
+   */
+  private shortestAlpha(current: number, target: number): number {
+    let diff = this.normalizeAngle(target - current);
+    return current + diff;
+  }
+
   private animateToFace(face: CubeFace): void {
     const target = FACE_ANGLES[face];
     const canvas = this.engine.getRenderingCanvas();
@@ -138,11 +157,13 @@ export class CubeView {
     const ease = new CubicEase();
     ease.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT);
 
-    // Use a single beginDirectAnimation call with both alpha/beta keys
+    // Compute shortest rotation path for alpha
+    const targetAlpha = this.shortestAlpha(this.camera.alpha, target.alpha);
+
     const alphaAnim = new Animation("camAlpha", "alpha", ANIM_FPS, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CONSTANT);
     alphaAnim.setKeys([
       { frame: 0, value: this.camera.alpha },
-      { frame: ANIM_FRAMES, value: target.alpha },
+      { frame: ANIM_FRAMES, value: targetAlpha },
     ]);
     alphaAnim.setEasingFunction(ease);
 
@@ -154,7 +175,6 @@ export class CubeView {
     betaAnim.setEasingFunction(ease);
 
     this.scene.beginDirectAnimation(this.camera, [alphaAnim, betaAnim], 0, ANIM_FRAMES, false, 1, () => {
-      // Re-attach controls after animation completes
       if (canvas) this.camera.attachControl(canvas, true);
     });
   }
