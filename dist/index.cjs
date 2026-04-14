@@ -1,1 +1,0 @@
-"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const e=require("./CubeView-D4DQreU_.cjs");exports.CubeFace=e.CubeFace;exports.CubeView=e.CubeView;exports.FACE_ANGLES=e.FACE_ANGLES;
