@@ -37,9 +37,9 @@ const HALF = S / 2;
  */
 const FACE_TEXTURE_ROTATION: Record<CubeFace, number> = {
   [CubeFace.RIGHT]:  Math.PI,       // X+ face: upside down → rotate 180°
-  [CubeFace.LEFT]:   Math.PI,       // X- face: upside down → rotate 180°
+  [CubeFace.LEFT]:   0,             // X- face: UV mirrored vs X+ → no rotation
   [CubeFace.FRONT]:  Math.PI / 2,   // Z+ face: rotated CCW → rotate 90° CW
-  [CubeFace.BACK]:   -Math.PI / 2,  // Z- face: rotated CW → rotate 90° CCW
+  [CubeFace.BACK]:   Math.PI / 2,   // Z- face: UV mirrored vs Z+ → same as FRONT
   [CubeFace.TOP]:    -Math.PI / 2,  // Y+ face: rotated CW → rotate 90° CCW
   [CubeFace.BOTTOM]: Math.PI / 2,   // Y- face: rotated CCW → rotate 90° CW
 };
