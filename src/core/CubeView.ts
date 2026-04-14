@@ -88,6 +88,8 @@ export class CubeView {
     camera.attachControl(canvas, true);
     camera.lowerRadiusLimit = CAMERA_RADIUS;
     camera.upperRadiusLimit = CAMERA_RADIUS;
+    camera.lowerBetaLimit = 0.01;          // Near top pole
+    camera.upperBetaLimit = Math.PI - 0.01; // Near bottom pole
     camera.panningSensibility = 0; // Disable panning
     camera.minZ = 0.1;
 
